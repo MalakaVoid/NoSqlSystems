@@ -50,7 +50,8 @@ class Publication:
         self.category = ''
         self.date = ''
         self.rewiews = []
-    def __init__(self, id, name, description, pages, category, date, reviews):
+    def __init__(self, pub_id, id, name, description, pages, category, date, reviews):
+        self.pub_id = pub_id
         self.id = id
         self.name = name
         self.description = description
@@ -74,15 +75,17 @@ class Publication:
         for each in self.reviews:
             each.get_print()
     def get_csv_list(self):
-        arr = [str(self.id), str(self.name), str(self.description), str(self.pages), str(self.category),
+        arr = [str(self.pub_id),str(self.id), str(self.name), str(self.description), str(self.pages), str(self.category),
                str(self.date), str('reviews.csv')]
         return arr
 
 class Review:
-    def __init__(self, id):
+    def __init__(self, pub_id, id):
+        self.pub_id = pub_id
         self.id = id
         self.text = ''
-    def __init__(self, id, text):
+    def __init__(self, pub_id, id, text):
+        self.pub_id = pub_id
         self.id = id
         self.text = text
     def get_print(self):
@@ -91,5 +94,5 @@ class Review:
         print('\t\t', end='')
         print(self.text)
     def get_csv_list(self):
-        arr = [str(self.id), str(self.text)]
+        arr = [str(self.pub_id), str(self.id), str(self.text)]
         return arr

@@ -21,9 +21,11 @@ def generation_data():
         for k in range(0, randint(2, 3)):  # for publications
             reviews_arr = []
             for j in range(0, randint(1, 2)):  # for reviews
-                reviews_arr.append(Review(i,
+                reviews_arr.append(Review(k,
+                                          i,
                                           get_random_long_string()))
-            publications_arr.append(Publication(i,
+            publications_arr.append(Publication(k,
+                                                i,
                                                 get_random_string(),
                                                 get_random_long_string(),
                                                 randint(5,100),
@@ -50,7 +52,7 @@ def import_csv(users):
     for user in users:
         all_users_csv_data.append(user.get_csv_list())
         tmp = user.mail
-        tmp.insert(0,user.get_user_id_str())
+        tmp.insert(0, user.get_user_id_str())
         all_mail_csv_data.append(tmp)
         for publication in user.publications:
             all_publications_csv_data.append(publication.get_csv_list())
@@ -68,35 +70,98 @@ def import_csv(users):
     f.close()
     f = open('publications.csv', 'w')
     out = csv.writer(f, delimiter=',', quoting=csv.QUOTE_NONE)
-    out.writerow(['id', 'name', 'description', 'pages', 'category', 'date', 'reviews'])
+    out.writerow(['pub_id', 'id', 'name', 'description', 'pages', 'category', 'date', 'reviews'])
     out.writerows(all_publications_csv_data)
     f.close()
     f = open('reviews.csv', 'w')
     out = csv.writer(f, delimiter=',', quoting=csv.QUOTE_NONE)
-    out.writerow(['id', 'text'])
+    out.writerow(['pub_id', 'id', 'text'])
     out.writerows(all_reviews_csv_data)
     f.close()
 #---------------------------------END OF GENERATION FAKE DATA-------------------------------
 
 def export_csv_to_json():
+    #------Get all lists of data-----------
+    list_user_fields = []
+    list_publications_fields = []
+    list_reviews_fields = []
+    list_users = []
+    list_publications = []
+    list_reviews = []
+    list_mails = []
     f = open('users.csv', newline='\n')
     csv_reader = csv.reader(f, delimiter=',')
-    line_count = 0
+    flag = True
     for row in csv_reader:
-        if line_count == 0:
-            print(f'Column names are {", ".join(row)}')
+        if flag:
+            list_user_fields = row
+            flag = False
         else:
-            print(row)
-        line_count+=1
-        print(line_count)
+            list_users.append(row)
+    f.close()
+    f = open('mail.csv', newline='\n')
+    csv_reader = csv.reader(f, delimiter=',')
+    for row in csv_reader:
+        list_mails.append(row)
+    f.close()
+    f = open('publications.csv', newline='\n')
+    csv_reader = csv.reader(f, delimiter=',')
+    flag = True
+    for row in csv_reader:
+        if flag:
+            list_publications_fields = row
+            flag = False
+        else:
+            list_publications.append(row)
+    f.close()
+    f = open('reviews.csv', newline='\n')
+    csv_reader = csv.reader(f, delimiter=',')
+    flag = True
+    for row in csv_reader:
+        if flag:
+            list_reviews_fields = row
+            flag = False
+        else:
+            list_reviews.append(row)
+    f.close()
+
+    print(list_publications)
+    #------------------END--------------
+    result_dict = {"users": []}
+    dict_user = dict()
+    for user_data in list_users:
+        dict_user = dict()
+        dict_publication = dict()
+        dict_reviews = dict()
+        for i in range(0, len(list_user_fields)):
+            dict_user[list_user_fields[i]] = user_data[i]
+        dict_user['publications'] = []
+        for publication in list_publications:
+            dict_publication = dict()
+            if publication[1] == user_data[0]:
+                for i in range(len(list_publications_fields)):
+                    dict_publication[list_publications_fields[i]] = publication[i]
+                dict_publication['reviews'] = []
+                for review in list_reviews:
+                    dict_reviews = dict()
+                    if review[0] == publication[0] and review[1] == user_data[0]:
+                        for i in range(len(list_reviews_fields)):
+                            dict_reviews[list_reviews_fields[i]] = review[i]
+                        dict_publication['reviews'].append(dict_reviews)
+                dict_user['publications'].append(dict_publication)
+        result_dict['users'].append(dict_user)
+        f = open("data.json", "w")
+        json.dump(result_dict, f)
+
 
 
 
 #---------------- MAIN CODE------------------------
 if __name__ == '__main__':
-    #for each in generation_data():
-        #import_csv(generation_data())
+    # for each in generation_data():
+    #     import_csv(generation_data())
     export_csv_to_json()
+
 
 
 

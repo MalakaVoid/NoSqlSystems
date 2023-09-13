@@ -1,5 +1,5 @@
 id,name,mail,registration_date,status,publications,date_of_birth,sex
-0,Алана,mail.csv,2000-9-9,waiting,publications.csv,2019-3-23,female
-1,Альфия,mail.csv,2005-9-7,decliened,publications.csv,2017-2-9,female
-2,Азамат,mail.csv,2005-2-16,approved,publications.csv,2021-1-20,male
-3,Алевтин,mail.csv,2012-11-14,waiting,publications.csv,2008-9-10,female
+0,Авраам,mail.csv,2018-5-6,approved,publications.csv,2017-3-12,male
+1,Альбина,mail.csv,2001-3-3,waiting,publications.csv,2000-13-21,female
+2,Аглая,mail.csv,2023-12-27,approved,publications.csv,2009-2-9,female
+3,Альберт,mail.csv,2023-10-30,decliened,publications.csv,2018-4-8,female
