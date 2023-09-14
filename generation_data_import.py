@@ -19,4 +19,4 @@ def get_random_long_string():
     return ''.join(random.choice(letters) for i in range(length))
 
 def get_random_date():
-    return f"{random.randint(2000, 2023)}-{random.randint(1, 13)}-{random.randint(1, 30)}"
+    return f"{random.randint(1990, 2023)}-{random.randint(1, 12)}-{random.randint(1, 28)}"

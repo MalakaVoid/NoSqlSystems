@@ -1,5 +1,6 @@
-#Варианты 2, 7
+#Варианты 2, 5
 import csv
+import datetime
 import random
 from random import randint
 from generation_data_import import get_names_list, get_random_string, get_random_long_string, get_random_date
@@ -12,9 +13,9 @@ def generation_data():
     users = []
     # HELPER ARRS
     names = get_names_list()
-    statuses = ['approved', 'waiting', 'decliened']
+    statuses = ['approved', 'decliened']
     sexes = ['male', 'female']
-    for i in range(0, 4):
+    for i in range(0, 1000):
         reviews_arr = []
         publications_arr = []
         mail_arr = []
@@ -124,8 +125,6 @@ def export_csv_to_json():
         else:
             list_reviews.append(row)
     f.close()
-
-    print(list_publications)
     #------------------END--------------
     result_dict = {"users": []}
     dict_user = dict()
@@ -136,6 +135,20 @@ def export_csv_to_json():
         for i in range(0, len(list_user_fields)):
             dict_user[list_user_fields[i]] = user_data[i]
         dict_user['publications'] = []
+        dict_user['mail'] = []
+        #-------------- ЗАДАНИЕ 2 ----------------
+        birth_date = dict_user['date_of_birth'].split('-')
+        date_of_birth = datetime.date(int(birth_date[0]), int(birth_date[1]), int(birth_date[2]))
+        interval = datetime.date.today() - date_of_birth
+        if interval.days < 5110:
+            dict_user['younger_fourteen'] = True
+        else:
+            dict_user['younger_fourteen'] = False
+        #-----------------------------------------
+        for each in list_mails:
+            if each[0] == user_data[0]:
+                for i in range(1, len(each)):
+                    dict_user['mail'].append(each[i])
         for publication in list_publications:
             dict_publication = dict()
             if publication[1] == user_data[0]:
@@ -152,7 +165,6 @@ def export_csv_to_json():
         result_dict['users'].append(dict_user)
         f = open("data.json", "w")
         json.dump(result_dict, f)
-
 
 
 
