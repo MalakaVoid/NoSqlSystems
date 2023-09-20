@@ -17,18 +17,6 @@ class User:
         self.publications = publications
         self.date_of_birth = date_of_birth
         self.sex = sex
-    def get_print(self):
-        print(self.id)
-        print(self.name)
-        for each in self.mail:
-            print(each, end=' ')
-        print()
-        print(self.registration_date)
-        print(self.status)
-        for each in self.publications:
-            each.get_print()
-        print(self.date_of_birth)
-        print(self.sex)
     def get_csv_list(self):
         arr = [str(self.id), str(self.name), 'mail.csv', str(self.registration_date), str(self.status),
                'publications.csv', str(self.date_of_birth), str(self.sex)]
@@ -59,21 +47,6 @@ class Publication:
         self.category = category
         self.date = date
         self.reviews = reviews
-    def get_print(self):
-        print('\t', end='')
-        print(self.id)
-        print('\t', end='')
-        print(self.name)
-        print('\t', end='')
-        print(self.description)
-        print('\t', end='')
-        print(self.pages)
-        print('\t', end='')
-        print(self.category)
-        print('\t', end='')
-        print(self.date)
-        for each in self.reviews:
-            each.get_print()
     def get_csv_list(self):
         arr = [str(self.pub_id),str(self.id), str(self.name), str(self.description), str(self.pages), str(self.category),
                str(self.date), str('reviews.csv')]
@@ -88,11 +61,6 @@ class Review:
         self.pub_id = pub_id
         self.id = id
         self.text = text
-    def get_print(self):
-        print('\t\t', end='')
-        print(self.id)
-        print('\t\t', end='')
-        print(self.text)
     def get_csv_list(self):
         arr = [str(self.pub_id), str(self.id), str(self.text)]
         return arr

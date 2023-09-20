@@ -50,6 +50,7 @@ def import_csv(users):
     all_mail_csv_data = []
     all_publications_csv_data = []
     all_reviews_csv_data = []
+
     for user in users:
         all_users_csv_data.append(user.get_csv_list())
         tmp = user.mail
@@ -59,21 +60,25 @@ def import_csv(users):
             all_publications_csv_data.append(publication.get_csv_list())
             for review in publication.reviews:
                 all_reviews_csv_data.append(review.get_csv_list())
+
     f = open('users.csv', 'w')
     out = csv.writer(f, delimiter=',', quoting=csv.QUOTE_NONE)
     out.writerow(['id', 'name', 'mail', 'registration_date', 'status', 'publications', 'date_of_birth', 'sex'])
     out.writerows(all_users_csv_data)
     f.close()
+
     f = open('mail.csv', 'w')
     out = csv.writer(f, delimiter=',', quoting=csv.QUOTE_NONE)
     out.writerow(['id', 'mail'])
     out.writerows(all_mail_csv_data)
     f.close()
+
     f = open('publications.csv', 'w')
     out = csv.writer(f, delimiter=',', quoting=csv.QUOTE_NONE)
     out.writerow(['pub_id', 'id', 'name', 'description', 'pages', 'category', 'date', 'reviews'])
     out.writerows(all_publications_csv_data)
     f.close()
+
     f = open('reviews.csv', 'w')
     out = csv.writer(f, delimiter=',', quoting=csv.QUOTE_NONE)
     out.writerow(['pub_id', 'id', 'text'])
@@ -90,8 +95,10 @@ def export_csv_to_json():
     list_publications = []
     list_reviews = []
     list_mails = []
+
     f = open('users.csv', newline='\n')
     csv_reader = csv.reader(f, delimiter=',')
+
     flag = True
     for row in csv_reader:
         if flag:
@@ -100,11 +107,13 @@ def export_csv_to_json():
         else:
             list_users.append(row)
     f.close()
+
     f = open('mail.csv', newline='\n')
     csv_reader = csv.reader(f, delimiter=',')
     for row in csv_reader:
         list_mails.append(row)
     f.close()
+
     f = open('publications.csv', newline='\n')
     csv_reader = csv.reader(f, delimiter=',')
     flag = True
@@ -115,6 +124,7 @@ def export_csv_to_json():
         else:
             list_publications.append(row)
     f.close()
+
     f = open('reviews.csv', newline='\n')
     csv_reader = csv.reader(f, delimiter=',')
     flag = True
@@ -128,15 +138,18 @@ def export_csv_to_json():
     #------------------END--------------
     result_dict = {"users": []}
     dict_user = dict()
+
     for user_data in list_users:
         dict_user = dict()
         dict_publication = dict()
         dict_reviews = dict()
+
         for i in range(0, len(list_user_fields)):
             dict_user[list_user_fields[i]] = user_data[i]
         dict_user['publications'] = []
         dict_user['mail'] = []
-        #-------------- ЗАДАНИЕ 2 ----------------
+
+        #-------------- TASK 2 ----------------
         birth_date = dict_user['date_of_birth'].split('-')
         date_of_birth = datetime.date(int(birth_date[0]), int(birth_date[1]), int(birth_date[2]))
         interval = datetime.date.today() - date_of_birth
@@ -145,10 +158,12 @@ def export_csv_to_json():
         else:
             dict_user['younger_fourteen'] = False
         #-----------------------------------------
+
         for each in list_mails:
             if each[0] == user_data[0]:
                 for i in range(1, len(each)):
                     dict_user['mail'].append(each[i])
+
         for publication in list_publications:
             dict_publication = dict()
             if publication[1] == user_data[0]:
@@ -162,6 +177,7 @@ def export_csv_to_json():
                             dict_reviews[list_reviews_fields[i]] = review[i]
                         dict_publication['reviews'].append(dict_reviews)
                 dict_user['publications'].append(dict_publication)
+
         result_dict['users'].append(dict_user)
         f = open("data.json", "w")
         json.dump(result_dict, f)
