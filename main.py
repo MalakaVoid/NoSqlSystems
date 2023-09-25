@@ -3,7 +3,7 @@ import csv
 import datetime
 import random
 from random import randint
-from generation_data_import import get_names_list, get_random_string, get_random_long_string, get_random_date
+from generation_data_import import get_names_list, get_random_string, get_random_long_string, get_random_date, get_random_long_text
 from Classes import User, Review, Publication
 import json
 
@@ -28,7 +28,7 @@ def generation_data():
             publications_arr.append(Publication(k,
                                                 i,
                                                 get_random_string(),
-                                                get_random_long_string(),
+                                                get_random_long_text(),
                                                 randint(5,100),
                                                 get_random_string(),
                                                 get_random_date(),
@@ -61,25 +61,25 @@ def import_csv(users):
             for review in publication.reviews:
                 all_reviews_csv_data.append(review.get_csv_list())
 
-    f = open('users.csv', 'w')
+    f = open('users.csv', 'w', newline='')
     out = csv.writer(f, delimiter=',', quoting=csv.QUOTE_NONE)
     out.writerow(['id', 'name', 'mail', 'registration_date', 'status', 'publications', 'date_of_birth', 'sex'])
     out.writerows(all_users_csv_data)
     f.close()
 
-    f = open('mail.csv', 'w')
+    f = open('mail.csv', 'w',newline='')
     out = csv.writer(f, delimiter=',', quoting=csv.QUOTE_NONE)
     out.writerow(['id', 'mail'])
     out.writerows(all_mail_csv_data)
     f.close()
 
-    f = open('publications.csv', 'w')
-    out = csv.writer(f, delimiter=',', quoting=csv.QUOTE_NONE)
+    f = open('publications.csv', 'w',newline='')
+    out = csv.writer(f, delimiter=',', quoting=csv.QUOTE_ALL)
     out.writerow(['pub_id', 'id', 'name', 'description', 'pages', 'category', 'date', 'reviews'])
     out.writerows(all_publications_csv_data)
     f.close()
 
-    f = open('reviews.csv', 'w')
+    f = open('reviews.csv', 'w',newline='')
     out = csv.writer(f, delimiter=',', quoting=csv.QUOTE_NONE)
     out.writerow(['pub_id', 'id', 'text'])
     out.writerows(all_reviews_csv_data)
@@ -180,14 +180,14 @@ def export_csv_to_json():
 
         result_dict['users'].append(dict_user)
         f = open("data.json", "w")
-        json.dump(result_dict, f)
+        json.dump(result_dict, f, indent=4)
 
 
 
 #---------------- MAIN CODE------------------------
 if __name__ == '__main__':
-    # for each in generation_data():
-    #     import_csv(generation_data())
+    for each in generation_data():
+        import_csv(generation_data())
     export_csv_to_json()
 
 
