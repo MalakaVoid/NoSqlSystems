@@ -186,9 +186,9 @@ def export_csv_to_json():
 
 #---------------- MAIN CODE------------------------
 if __name__ == '__main__':
-    for each in generation_data():
-        import_csv(generation_data())
-    export_csv_to_json()
+    #for each in generation_data():
+    #    import_csv(generation_data())
+    #export_csv_to_json()
 
 
 
