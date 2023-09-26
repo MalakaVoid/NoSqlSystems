@@ -1,0 +1,37 @@
+{
+  "chats": {
+    "type": "Private",
+    "title": "Aleksey",
+    "description": "",
+    "users": [
+      {
+        "user_id": 1,
+        "username": "MalakaVoid",
+        "first_name": "Daniil",
+        "last_name": "Azbukin",
+        "registration_date": "2022-10-21",
+        "sex": "male",
+        "mail": ["a@mail.ru", "b@mail.ru"]
+      },
+      {
+        "user_id": 2,
+        "username": "SleepWalker",
+        "first_name": "Artyom",
+        "last_name": "Kachalov",
+        "registration_date": "2022-06-22",
+        "sex": "male",
+        "mail": ["k@mail.ru", "r@mail.ru"]
+      }],
+    "message_history": [
+      {
+        "message_id": 1,
+        "date": "2023-09-26 15:14",
+        "user_id": 1,
+        "text": "Hello",
+        "has_photo": false,
+        "photo": null,
+        "caption": null
+      }]
+  }
+
+}
