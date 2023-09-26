@@ -1,6 +1,7 @@
 {
-  "chats": {
-    "type": "Private",
+  "chats": [{
+    "chat_id": 1,
+    "chat_type": "Private",
     "title": "Aleksey",
     "description": "",
     "users": [
@@ -32,6 +33,6 @@
         "photo": null,
         "caption": null
       }]
-  }
+  }]
 
 }

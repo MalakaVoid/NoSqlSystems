@@ -1,0 +1,174 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "description": "MAIN",
+  "properties": {
+    "chats": {
+      "type": "array",
+      "description": "Contains all chat objects",
+      "items": [
+        {
+          "type": "object",
+          "description": "Contains all information about chats",
+          "properties": {
+            "chat_id": {
+              "type": "integer",
+              "description": "Chat identifier"
+            },
+            "chat_type": {
+              "enum": ["Private", "Public"]
+            },
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "users": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "user_id": {
+                      "type": "integer"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "first_name": {
+                      "type": "string"
+                    },
+                    "last_name": {
+                      "type": "string"
+                    },
+                    "registration_date": {
+                      "type": "string"
+                    },
+                    "sex": {
+                      "type": "string"
+                    },
+                    "mail": {
+                      "type": "array",
+                      "items": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "user_id",
+                    "username",
+                    "first_name",
+                    "last_name",
+                    "registration_date",
+                    "sex",
+                    "mail"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "user_id": {
+                      "type": "integer"
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "first_name": {
+                      "type": "string"
+                    },
+                    "last_name": {
+                      "type": "string"
+                    },
+                    "registration_date": {
+                      "type": "string"
+                    },
+                    "sex": {
+                      "type": "string"
+                    },
+                    "mail": {
+                      "type": "array",
+                      "items": [
+                        {
+                          "type": "string"
+                        },
+                        {
+                          "type": "string"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "user_id",
+                    "username",
+                    "first_name",
+                    "last_name",
+                    "registration_date",
+                    "sex",
+                    "mail"
+                  ]
+                }
+              ]
+            },
+            "message_history": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "message_id": {
+                      "type": "integer"
+                    },
+                    "date": {
+                      "type": "string"
+                    },
+                    "user_id": {
+                      "type": "integer"
+                    },
+                    "text": {
+                      "type": "string"
+                    },
+                    "has_photo": {
+                      "type": "boolean"
+                    },
+                    "photo": {
+                      "type": "null"
+                    },
+                    "caption": {
+                      "type": "null"
+                    }
+                  },
+                  "required": [
+                    "message_id",
+                    "date",
+                    "user_id",
+                    "text",
+                    "has_photo",
+                    "photo",
+                    "caption"
+                  ]
+                }
+              ]
+            }
+          },
+          "required": [
+            "chat_id",
+            "chat_type",
+            "title",
+            "description",
+            "users",
+            "message_history"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "chats"
+  ]
+}
