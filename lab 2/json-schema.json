@@ -16,19 +16,24 @@
               "description": "Chat identifier"
             },
             "chat_type": {
-              "enum": ["Private", "Public"]
+              "enum": ["Private", "Public"],
+              "description": "Type, for only 2 people, or more"
             },
             "title": {
-              "type": "string"
+              "type": "string",
+              "description": "Title of the chat"
             },
             "description": {
-              "type": "string"
+              "type": "string",
+              "description": "Chat description"
             },
             "users": {
               "type": "array",
+              "description": "Contains all users in chat",
               "items": [
                 {
                   "type": "object",
+                  "description": "User class",
                   "properties": {
                     "user_id": {
                       "type": "integer"
@@ -51,9 +56,6 @@
                     "mail": {
                       "type": "array",
                       "items": [
-                        {
-                          "type": "string"
-                        },
                         {
                           "type": "string"
                         }
