@@ -188,7 +188,7 @@ def export_csv_to_json():
 if __name__ == '__main__':
     #for each in generation_data():
     #    import_csv(generation_data())
-    #export_csv_to_json()
+    export_csv_to_json()
 
 
 
