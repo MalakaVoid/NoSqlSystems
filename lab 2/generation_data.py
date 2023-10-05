@@ -1,5 +1,4 @@
-import random, string
-
+import random, string, datetime
 def get_random_string():
     length = random.randint(3,15)
     letters = string.ascii_lowercase
@@ -21,7 +20,9 @@ def get_random_long_text():
     return result
 
 def get_random_date():
-    return f"{random.randint(1990, 2023)}-{random.randint(1, 12)}-{random.randint(1, 28)}"
+    return datetime.date(year=random.randint(1980, 2023),
+                         month=random.randint(1, 12),
+                         day=random.randint(1, 28)).strftime("%Y-%m-%d")
 
 def get_random_long_string():
     length = random.randint(10, 100)

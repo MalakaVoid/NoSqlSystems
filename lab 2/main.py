@@ -3,6 +3,11 @@ import random
 from jsonschema import validate
 from globals import CHAT_TYPES, SEXES
 import generation_data as g_d
+from jsonschema import (
+    Draft7Validator,
+    FormatChecker,
+)
+
 chat_ids = 0
 user_ids = 0
 mes_ids = 0
@@ -72,7 +77,7 @@ def create_message_exmp() -> dict:
     return message
 
 
-def create_correct_json_file():
+def create_correct_json_file() -> None:
     result_dict = create_a_main_data()
     f = open("1-c.json", "w")
     json.dump(result_dict, f, indent=4)
@@ -82,43 +87,77 @@ def create_correct_json_file():
     result_dict = create_a_main_data()
     f = open("3-c.json", "w")
     json.dump(result_dict, f, indent=4)
+    result_dict = create_a_main_data()
+    f = open("1-w.json", "w")
+    json.dump(result_dict, f, indent=4)
+    result_dict = create_a_main_data()
+    f = open("2-w.json", "w")
+    json.dump(result_dict, f, indent=4)
+    result_dict = create_a_main_data()
+    f = open("3-w.json", "w")
+    json.dump(result_dict, f, indent=4)
 
-def validate_data():
+def validate_data() -> None:
     f = open("1-c.json")
     data_1_c = json.load(f)
     f = open("2-c.json")
     data_2_c = json.load(f)
     f = open("3-c.json")
     data_3_c = json.load(f)
+    f = open("1-w.json")
+    data_1_w = json.load(f)
+    f = open("2-w.json")
+    data_2_w = json.load(f)
+    f = open("3-w.json")
+    data_3_w = json.load(f)
     f = open("json-schema.json")
     schema = json.load(f)
+    validator = Draft7Validator(schema, format_checker=FormatChecker())
+
     try:
-        validate(data_1_c, schema)
+        validator.validate(data_1_c)
     except Exception as e:
         print("Ошибка при валидации 1-c.json. ", e)
     else:
         print("Файл 1-c.json прошел валидацию!")
+    print("--------------------------------------")
     try:
-        validate(data_2_c, schema)
+        validator.validate(data_2_c)
     except Exception as e:
         print("Ошибка при валидации 2-c.json. ", e)
     else:
         print("Файл 2-c.json прошел валидацию!")
+    print("--------------------------------------")
     try:
-        validate(data_2_c, schema)
+        validator.validate(data_3_c)
     except Exception as e:
         print("Ошибка при валидации 3-c.json. ", e)
     else:
         print("Файл 3-c.json прошел валидацию!")
+    print("--------------------------------------")
+    try:
+        validator.validate(data_1_w)
+    except Exception as e:
+        print("Ошибка при валидации 1-w.json. ", e)
+    else:
+        print("Файл 1-w.json прошел валидацию!")
+    print("--------------------------------------")
+    try:
+        validator.validate(data_2_w)
+    except Exception as e:
+        print("Ошибка при валидации 2-w.json. ", e)
+    else:
+        print("Файл 2-w.json прошел валидацию!")
+    print("--------------------------------------")
+    try:
+        validator.validate(data_3_w)
+    except Exception as e:
+        print("Ошибка при валидации 3-w.json. ", e)
+    else:
+        print("Файл 3-w.json прошел валидацию!")
 
 
 
 
 #create_correct_json_file()
 validate_data()
-# f = open("example.json")
-# data = json.load(f)
-# f = open("json-schema.json")
-# schema = json.load(f)
-#
-# print(validate(data, schema))

@@ -40,6 +40,7 @@
           "users":
           {
             "type": "array",
+            "minItems": 2,
             "description": "Contains all users in chat",
             "items":
             {
@@ -65,7 +66,8 @@
                 },
                 "registration_date":
                 {
-                  "type": "string"
+                  "type": "string",
+                  "format": "date"
                 },
                 "sex":
                 {
