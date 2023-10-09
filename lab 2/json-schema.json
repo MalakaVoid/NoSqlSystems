@@ -17,6 +17,7 @@
           "chat_id":
           {
             "type": "integer",
+            "minimum": 0,
             "description": "Chat identifier"
           },
           "chat_type":
@@ -50,7 +51,8 @@
               {
                 "user_id":
                 {
-                  "type": "integer"
+                  "type": "integer",
+                  "minimum": 0
                 },
                 "username":
                 {
@@ -78,7 +80,8 @@
                   "type": "array",
                   "items": [
                     {
-                      "type": "string"
+                      "type": "string",
+                      "format": "email"
                     }
                   ]
                 }
@@ -91,7 +94,8 @@
                 "registration_date",
                 "sex",
                 "mail"
-              ]
+              ],
+              "additionalProperties": false
             }
           },
           "message_history":
@@ -104,7 +108,8 @@
               {
                 "message_id":
                 {
-                  "type": "integer"
+                  "type": "integer",
+                  "minimum": 0
                 },
                 "date":
                 {
@@ -112,7 +117,8 @@
                 },
                 "user_id":
                 {
-                  "type": "integer"
+                  "type": "integer",
+                  "minimum": 0
                 },
                 "text":
                 {
@@ -137,7 +143,8 @@
                 "user_id",
                 "text",
                 "has_photo"
-              ]
+              ],
+              "additionalProperties": false
             }
           }
         },
@@ -148,11 +155,13 @@
           "description",
           "users",
           "message_history"
-        ]
+        ],
+        "additionalProperties": false
       }
     }
   },
   "required": [
     "chats"
-  ]
+  ],
+  "additionalProperties": false
 }
