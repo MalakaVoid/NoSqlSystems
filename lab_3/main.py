@@ -10,8 +10,7 @@ arr = []
 class Controller_Window(QMainWindow):
     def __init__(self, username):
         super().__init__()
-        self.i =1
-        self.arr = []
+        self.i = 1
         self.initUI(username)
 
 
@@ -25,13 +24,13 @@ class Controller_Window(QMainWindow):
         self.widget.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         self.vbox = QVBoxLayout()
 
-        for i in range(0, 100):
-            self.label = QLabel(f"{i}")
-            self.label.setMaximumSize(QSize(400, 5000))
-            self.label.setWordWrap(True)
-            self.vbox.addWidget(self.label)
-            self.arr.append(self.label)
-
+        self.label = QLabel("d")
+        self.label.setLineWidth(2)
+        #self.label.setStyleSheet('border: 3px solid black; border-radius: 5px; margin: 3px; padding: 3px;')
+        self.label.setMaximumSize(QSize(500, 2))
+        self.label.setMinimumSize(QSize(500, 2))
+        self.label.setWordWrap(True)
+        self.vbox.addWidget(self.label)
 
         self.widget.setLayout(self.vbox)
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
@@ -55,12 +54,24 @@ class Controller_Window(QMainWindow):
         self.setCentralWidget(self.centralwidget)
 
     def send_mes_btn_hndl(self):
+        for i in range(len(arr)):
+            arr[i].reset_chat_hndl()
+        print(self.input_message.text())
+    def reset_chat_hndl(self):
         for i in reversed(range(self.vbox.count())):
             self.vbox.itemAt(i).widget().setParent(None)
 
+        self.label = QLabel("")
+        self.label.setMaximumSize(QSize(500, 2))
+        self.label.setMinimumSize(QSize(500, 2))
+        self.vbox.addWidget(self.label)
+
         for i in range(5):
-            self.label = QLabel(f"{i}")
-            self.label.setMaximumSize(QSize(400, 5000))
+            text = f"{i} hhhhsdsjadna jsndk ajndjk asndkjasasdasdasda asdsada sadasdsa"
+            self.label = QLabel(text)
+            self.label.setStyleSheet('border: 3px solid black; border-radius: 5px; margin: 3px; padding: 3px;')
+            self.label.setMaximumSize(QSize(500, 5000))
+            self.label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
             self.label.setWordWrap(True)
             self.vbox.addWidget(self.label)
 
@@ -129,6 +140,7 @@ class Authorization_Window(QMainWindow):
         self.setMaximumSize(QSize(600, 200))
         self.setMinimumSize(QSize(400, 200))
 
+        self.arr = []
         self.sec_w = []
         self.registration_window = None
 
@@ -174,7 +186,7 @@ class Authorization_Window(QMainWindow):
             index = len(self.sec_w)
             self.sec_w.append(Controller_Window(self.input_username.text()))
             self.sec_w[index].show()
-            arr.append(self.sec_w)
+            arr.append(self.sec_w[index])
             self.clean()
         elif code == 404:
             self.label_errors.setText("User not founded.")
