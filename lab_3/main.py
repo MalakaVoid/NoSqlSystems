@@ -11,7 +11,9 @@ class Controller_Window(QMainWindow):
     def __init__(self, username):
         super().__init__()
         self.i =1
+        self.arr = []
         self.initUI(username)
+
 
     def initUI(self, username):
         self.setWindowTitle(f"{username}")
@@ -23,11 +25,12 @@ class Controller_Window(QMainWindow):
         self.widget.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         self.vbox = QVBoxLayout()
 
-        # for i in range(0, 100):
-        #     label = QLabel(f"{i}")
-        #     label.setMaximumSize(QSize(400, 5000))
-        #     label.setWordWrap(True)
-        #     self.vbox.addWidget(label)
+        for i in range(0, 100):
+            self.label = QLabel(f"{i}")
+            self.label.setMaximumSize(QSize(400, 5000))
+            self.label.setWordWrap(True)
+            self.vbox.addWidget(self.label)
+            self.arr.append(self.label)
 
 
         self.widget.setLayout(self.vbox)
@@ -52,11 +55,14 @@ class Controller_Window(QMainWindow):
         self.setCentralWidget(self.centralwidget)
 
     def send_mes_btn_hndl(self):
-        label = QLabel(f"NEW LINE!!!!!!! {self.i}")
-        label.setMaximumSize(QSize(550, 5000))
-        label.setWordWrap(True)
-        self.vbox.addWidget(label)
+        for i in reversed(range(self.vbox.count())):
+            self.vbox.itemAt(i).widget().setParent(None)
 
+        for i in range(5):
+            self.label = QLabel(f"{i}")
+            self.label.setMaximumSize(QSize(400, 5000))
+            self.label.setWordWrap(True)
+            self.vbox.addWidget(self.label)
 
 
 class Registration_Window(QMainWindow):
