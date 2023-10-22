@@ -1,10 +1,7 @@
 import json
-
 import redis
-r = redis.Redis(host='localhost', port=6379, decode_responses=True)
 
-def test():
-    a=1
+r = redis.Redis(host='localhost', port=6379, decode_responses=True)
 
 def send_message_to_chat(username, text):
     id_m = r.get('chat:messages:id')
@@ -24,6 +21,33 @@ def get_all_chat_messages():
         messages_json.append(json.loads(each))
     return messages_json
 
+def check_user_existance(username):
+    return r.exists(f'user:{username}')
+
+def add_new_user(username, password):
+    try:
+        if r.exists(f'user:{username}'):
+            return 501
+        else:
+            r.hset(f'user:{username}', 'username', username)
+            r.hset(f'user:{username}', 'passwd', password)
+    except Exception as e:
+        return 404
+    return 200
+
+def auth_usr_checker(username, password):
+    code = 404
+    if r.exists(f'user:{username}'):
+        if r.hget(f'user:{username}', 'passwd') == password:
+            code = 200
+        else:
+            code = 501
+    else:
+        code = 404
+    return code
+
+
+#------------------- USELESS FOR NOW ------------------
 
 def add_user_to_chat(username, chat_title):
     r.lpush(f"chat:{chat_title}:users", username)
@@ -49,27 +73,3 @@ def get_all_user_chats_titles(username):
 
 def check_title_chat_existence(title):
     return r.exists(f'chat:{title}')
-def check_user_existance(username):
-    return r.exists(f'user:{username}')
-
-def add_new_user(username, password):
-    try:
-        if r.exists(f'user:{username}'):
-            return 501
-        else:
-            r.hset(f'user:{username}', 'username', username)
-            r.hset(f'user:{username}', 'passwd', password)
-    except Exception as e:
-        return 404
-    return 200
-
-def auth_usr_checker(username, password):
-    code = 404
-    if r.exists(f'user:{username}'):
-        if r.hget(f'user:{username}', 'passwd') == password:
-            code = 200
-        else:
-            code = 501
-    else:
-        code = 404
-    return code

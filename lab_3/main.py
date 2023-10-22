@@ -7,8 +7,10 @@ from PyQt6.QtWidgets import (QApplication, QWidget, QPushButton, QMainWindow, QL
 from PyQt6.QtCore import Qt, QSize, QSizeF, QRect
 import sys
 import math
+
 arr = []
-class Controller_Window(QMainWindow):
+
+class ChatWindow(QMainWindow):
     def __init__(self, username):
         super().__init__()
         self.i = 1
@@ -33,7 +35,6 @@ class Controller_Window(QMainWindow):
         self.scroll.setWidgetResizable(True)
         self.scroll.setWidget(self.widget)
         self.scroll.verticalScrollBar().rangeChanged.connect(self.scroll_to_end)
-        #self.scroll_items = 0
 
         self.centralwidget = QWidget()
         self.centralwidgetlayout = QVBoxLayout()
@@ -192,7 +193,7 @@ class Authorization_Window(QMainWindow):
         code = database_operations.auth_usr_checker(self.input_username.text(), self.input_password.text())
         if code == 200:
             index = len(self.sec_w)
-            self.sec_w.append(Controller_Window(self.input_username.text()))
+            self.sec_w.append(ChatWindow(self.input_username.text()))
             self.sec_w[index].show()
             arr.append(self.sec_w[index])
             self.clean()
