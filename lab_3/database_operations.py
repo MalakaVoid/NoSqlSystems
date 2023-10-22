@@ -1,10 +1,29 @@
+import json
+
 import redis
 r = redis.Redis(host='localhost', port=6379, decode_responses=True)
 
 def test():
-    # print(r.keys('*:SleepWalker'))
-    r.lpush('test', '123')
-    r.lpush('test', '123')
+    a=1
+
+def send_message_to_chat(username, text):
+    id_m = r.get('chat:messages:id')
+    message_ex = {
+        "message_id": int(id_m)+1,
+        "user_name": username,
+        "text": text
+    }
+    r.lpush('chat:messages', json.dumps(message_ex))
+    r.set('chat:messages:id', int(id_m)+1)
+
+
+def get_all_chat_messages():
+    messages_str = r.lrange('chat:messages', 0, -1)
+    messages_json = []
+    for each in reversed(messages_str):
+        messages_json.append(json.loads(each))
+    return messages_json
+
 
 def add_user_to_chat(username, chat_title):
     r.lpush(f"chat:{chat_title}:users", username)

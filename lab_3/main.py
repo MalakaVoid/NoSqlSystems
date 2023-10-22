@@ -3,19 +3,21 @@ import client_ui
 import database_operations
 from PyQt6.QtWidgets import (QApplication, QWidget, QPushButton, QMainWindow, QLabel,
                              QLineEdit, QVBoxLayout, QGridLayout, QHBoxLayout, QScrollArea,
-                             QSizePolicy, QBoxLayout)
+                             QSizePolicy, QBoxLayout, QListView)
 from PyQt6.QtCore import Qt, QSize, QSizeF, QRect
 import sys
+import math
 arr = []
 class Controller_Window(QMainWindow):
     def __init__(self, username):
         super().__init__()
         self.i = 1
-        self.initUI(username)
+        self.username = username
+        self.initUI()
 
 
-    def initUI(self, username):
-        self.setWindowTitle(f"{username}")
+    def initUI(self):
+        self.setWindowTitle(f"{self.username}")
         self.setMaximumSize(QSize(600, 700))
         self.setMinimumSize(QSize(600, 700))
 
@@ -24,19 +26,14 @@ class Controller_Window(QMainWindow):
         self.widget.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         self.vbox = QVBoxLayout()
 
-        self.label = QLabel("d")
-        self.label.setLineWidth(2)
-        #self.label.setStyleSheet('border: 3px solid black; border-radius: 5px; margin: 3px; padding: 3px;')
-        self.label.setMaximumSize(QSize(500, 2))
-        self.label.setMinimumSize(QSize(500, 2))
-        self.label.setWordWrap(True)
-        self.vbox.addWidget(self.label)
 
         self.widget.setLayout(self.vbox)
         self.scroll.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         self.scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         self.scroll.setWidgetResizable(True)
         self.scroll.setWidget(self.widget)
+        self.scroll.verticalScrollBar().rangeChanged.connect(self.scroll_to_end)
+        #self.scroll_items = 0
 
         self.centralwidget = QWidget()
         self.centralwidgetlayout = QVBoxLayout()
@@ -48,32 +45,43 @@ class Controller_Window(QMainWindow):
         self.button_send.clicked.connect(self.send_mes_btn_hndl)
 
         self.input_message = QLineEdit()
+        self.input_message.returnPressed.connect(self.send_mes_btn_hndl)
 
         self.centralwidgetlayout.addWidget(self.button_send)
         self.centralwidgetlayout.addWidget(self.input_message)
+
+        self.reset_chat_hndl()
         self.setCentralWidget(self.centralwidget)
 
+    def scroll_to_end(self, _min, _max):
+        self.scroll.verticalScrollBar().setValue(_max)
     def send_mes_btn_hndl(self):
-        for i in range(len(arr)):
-            arr[i].reset_chat_hndl()
-        print(self.input_message.text())
+        if self.input_message.text() != "":
+            database_operations.send_message_to_chat(self.username, self.input_message.text())
+            self.input_message.setText("")
+            for i in range(len(arr)):
+                arr[i].reset_chat_hndl()
+
     def reset_chat_hndl(self):
         for i in reversed(range(self.vbox.count())):
             self.vbox.itemAt(i).widget().setParent(None)
 
-        self.label = QLabel("")
-        self.label.setMaximumSize(QSize(500, 2))
-        self.label.setMinimumSize(QSize(500, 2))
-        self.vbox.addWidget(self.label)
-
-        for i in range(5):
-            text = f"{i} hhhhsdsjadna jsndk ajndjk asndkjasasdasdasda asdsada sadasdsa"
-            self.label = QLabel(text)
-            self.label.setStyleSheet('border: 3px solid black; border-radius: 5px; margin: 3px; padding: 3px;')
-            self.label.setMaximumSize(QSize(500, 5000))
-            self.label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-            self.label.setWordWrap(True)
-            self.vbox.addWidget(self.label)
+        label = QLabel("")
+        label.setMaximumSize(QSize(500, 2))
+        label.setMinimumSize(QSize(500, 2))
+        self.vbox.addWidget(label)
+        tmp = 0
+        for message_json in database_operations.get_all_chat_messages():
+            text = (f"<b>{message_json['user_name']}</b><br>"
+                    f"{message_json['text']}")
+            label = QLabel(text)
+            label.setStyleSheet('border: 3px solid black; border-radius: 5px; margin: 3px; padding: 3px;')
+            label.setMaximumSize(QSize(500, 5000))
+            label.setSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+            label.setWordWrap(True)
+            label.adjustSize()
+            tmp += 1
+            self.vbox.addWidget(label)
 
 
 class Registration_Window(QMainWindow):
