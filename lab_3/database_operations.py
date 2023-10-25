@@ -1,6 +1,5 @@
 import json
 import redis
-
 r = redis.Redis(host='localhost', port=6379, decode_responses=True)
 
 def send_message_to_chat(username, text):
@@ -11,6 +10,7 @@ def send_message_to_chat(username, text):
         "text": text
     }
     r.lpush('chat:messages', json.dumps(message_ex))
+    r.publish('reset_hndl', 'start')
     r.set('chat:messages:id', int(id_m)+1)
 
 

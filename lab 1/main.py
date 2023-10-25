@@ -179,6 +179,7 @@ def export_csv_to_json():
                 dict_user['publications'].append(dict_publication)
 
         result_dict['users'].append(dict_user)
+        print(type(result_dict))
         f = open("data.json", "w")
         json.dump(result_dict, f, indent=4)
 
@@ -186,8 +187,8 @@ def export_csv_to_json():
 
 #---------------- MAIN CODE------------------------
 if __name__ == '__main__':
-    #for each in generation_data():
-    #    import_csv(generation_data())
+    for each in generation_data():
+        import_csv(generation_data())
     export_csv_to_json()
 
 

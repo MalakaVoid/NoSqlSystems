@@ -1,16 +1,22 @@
+import time
+from threading import Thread
 import redis
 import client_ui
 import database_operations
 from PyQt6.QtWidgets import (QApplication, QWidget, QPushButton, QMainWindow, QLabel,
                              QLineEdit, QVBoxLayout, QGridLayout, QHBoxLayout, QScrollArea,
                              QSizePolicy, QBoxLayout, QListView)
-from PyQt6.QtCore import Qt, QSize, QSizeF, QRect
+from PyQt6.QtCore import Qt, QSize, QSizeF, QRect, pyqtSignal
 import sys
 import math
 
 arr = []
+a = redis.Redis(host='localhost', port=6379, decode_responses=True)
+subscrible = a.pubsub()
+subscrible.subscribe('reset_hndl')
 
 class ChatWindow(QMainWindow):
+    signal_incomingText = pyqtSignal()
     def __init__(self, username):
         super().__init__()
         self.i = 1
@@ -52,6 +58,10 @@ class ChatWindow(QMainWindow):
         self.centralwidgetlayout.addWidget(self.input_message)
 
         self.reset_chat_hndl()
+        thread = Thread(target=self.cheack_updates)
+        self.signal_incomingText.connect(self.reset_chat_hndl)
+        thread.start()
+
         self.setCentralWidget(self.centralwidget)
 
     def scroll_to_end(self, _min, _max):
@@ -60,8 +70,13 @@ class ChatWindow(QMainWindow):
         if self.input_message.text() != "":
             database_operations.send_message_to_chat(self.username, self.input_message.text())
             self.input_message.setText("")
-            for i in range(len(arr)):
-                arr[i].reset_chat_hndl()
+
+    def cheack_updates(self):
+        while True:
+            mes = subscrible.get_message()
+            if mes:
+                self.signal_incomingText.emit()
+            time.sleep(0.01)
 
     def reset_chat_hndl(self):
         for i in reversed(range(self.vbox.count())):
@@ -194,8 +209,9 @@ class Authorization_Window(QMainWindow):
         if code == 200:
             index = len(self.sec_w)
             self.sec_w.append(ChatWindow(self.input_username.text()))
-            self.sec_w[index].show()
+            global arr
             arr.append(self.sec_w[index])
+            self.sec_w[index].show()
             self.clean()
         elif code == 404:
             self.label_errors.setText("User not founded.")
@@ -208,8 +224,10 @@ class Authorization_Window(QMainWindow):
         self.registration_window.show()
 
 
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = Authorization_Window()
     window.show()
     sys.exit(app.exec())
+
